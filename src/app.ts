@@ -22,7 +22,9 @@ import { InvestigationStore } from "./investigate/store.js";
 import { SlackThreadReporter } from "./investigate/reporter.js";
 import { ToolRegistry } from "./investigate/tools.js";
 import { InvestigationRunner } from "./investigate/runner.js";
-import type { Investigation } from "./domain/types.js";
+import { CodeFixer } from "./fixer/codefixer.js";
+import { createWorkspaceManager } from "./fixer/workspace.js";
+import type { FixOutcome, Investigation } from "./domain/types.js";
 
 const { App } = boltPkg;
 
@@ -281,23 +283,90 @@ async function main(): Promise<void> {
     }
   });
 
+  // ---- Layer 3: CodeFixer ---------------------------------------------------
+  const codeFixer = new CodeFixer({
+    workspaces: createWorkspaceManager(config.workspaceTier, process.env.DOCKER_FIXER_IMAGE),
+    github,
+    githubToken: config.githubToken,
+  });
+
+  function describeOutcome(outcome: FixOutcome): string {
+    switch (outcome.status) {
+      case "pr-opened": {
+        const v = outcome.verification;
+        return (
+          `:white_check_mark: *Verified fix PR opened:* ${outcome.prUrl}\n` +
+          `> ${outcome.summary}\n` +
+          `Verification (computed by wrapper tooling): repro added ${v.reproTestAdded ? "✅" : "❌"} · ` +
+          `fails on original ${v.reproTestFailsOnOriginal ? "✅" : "❌"} · ` +
+          `passes on fixed ${v.reproTestPassesOnFixed ? "✅" : "❌"} · ` +
+          `full suite ${v.fullSuitePassed ? "✅" : "❌"} · ${v.linesChanged} lines changed`
+        );
+      }
+      case "no-repro":
+        return (
+          `:x: *Could not reproduce* the bug under the diagnosed conditions — treating the diagnosis as suspect and escalating to a human.\n` +
+          `\`\`\`${outcome.detail.slice(0, 1200)}\`\`\``
+        );
+      case "fix-unverified":
+        return (
+          `:warning: A fix exists but *verification is incomplete* — pushed to ${outcome.branchUrl} (no PR opened).\n` +
+          `\`\`\`${outcome.detail.slice(0, 800)}\`\`\``
+        );
+      case "failed":
+        return (
+          `:rotating_light: *Fix attempt failed:* ${outcome.reason}\n` +
+          (outcome.transcript ? `\`\`\`${outcome.transcript.slice(-1200)}\`\`\`` : "")
+        );
+    }
+  }
+
   // The MANDATORY approval gate: the CodeFixer only ever launches from this
-  // click. (The fixer itself lands in M4 — for now we record the approval.)
+  // click (§5/§6). Never auto-applied.
   app.action("attempt_fix", async ({ ack, body, action }) => {
     await ack();
     const invId = (action as { value?: string }).value ?? "";
     const inv = invStore.get(invId);
     const userId = (body as { user?: { id?: string } }).user?.id;
-    if (!inv) {
-      log.warn("attempt_fix for unknown investigation", { invId });
+    if (!inv || !inv.diagnosis || inv.diagnosis.recommendedAction.type !== "code-fix") {
+      log.warn("attempt_fix without a code-fix diagnosis", { invId });
       return;
     }
+    if (inv.status === "fixing") {
+      log.info("attempt_fix ignored — already fixing", { invId });
+      return;
+    }
+    invStore.setStatus(inv.id, "fixing");
     log.info("fix attempt approved", { inv: invId, by: userId });
+
+    const brief = inv.diagnosis.recommendedAction.brief;
     await app.client.chat.postMessage({
       channel: inv.trigger.channel,
       thread_ts: inv.trigger.threadTs,
-      text: `:white_check_mark: Fix attempt approved by <@${userId}> for \`${invId}\`. :construction: The CodeFixer sandbox lands in M4 — approval recorded.`,
+      text:
+        `:hammer_and_wrench: Fix attempt approved by <@${userId}>. Spinning up the *${config.workspaceTier}* sandbox: ` +
+        `clone \`${brief.repo}\` @ \`${brief.ref}\` + install (network on), then the fixer runs with *no network*. ` +
+        `Reproduce-first is enforced. Expect ~5–10 min.`,
     });
+
+    void (async () => {
+      const customer = registry.get(inv.customer);
+      const outcome = await codeFixer.attemptFix(brief, {
+        investigationId: inv.id,
+        customerDisplay: customer?.displayName ?? inv.customer,
+        triggerPermalink: inv.trigger.permalink,
+        diagnosis: inv.diagnosis,
+      });
+      invStore.setStatus(inv.id, outcome.status === "pr-opened" ? "done" : "escalated");
+      log.info("fix outcome", { inv: inv.id, status: outcome.status });
+      await app.client.chat
+        .postMessage({
+          channel: inv.trigger.channel,
+          thread_ts: inv.trigger.threadTs,
+          text: describeOutcome(outcome),
+        })
+        .catch((e) => log.error("outcome post failed", { error: (e as Error).message }));
+    })();
   });
 
   // ---- Boot ------------------------------------------------------------------
