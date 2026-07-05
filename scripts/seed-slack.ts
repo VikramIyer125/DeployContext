@@ -12,6 +12,7 @@
  *   SLACK_BOT_TOKEN=xoxb-… npx tsx scripts/seed-slack.ts
  *   npx tsx scripts/seed-slack.ts --dry-run   # print actions, no API calls
  */
+import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";

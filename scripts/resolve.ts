@@ -6,6 +6,7 @@
  *   GITHUB_TOKEN=$(gh auth token) npx tsx scripts/resolve.ts acme
  *   GITHUB_TOKEN=$(gh auth token) npx tsx scripts/resolve.ts acme --diff beta
  */
+import "dotenv/config";
 import { GitHubLiveConnector } from "../src/connectors/github.js";
 import { UnleashLiveConnector } from "../src/connectors/unleash.js";
 import { Registry, githubManifestLoader } from "../src/registry/registry.js";
