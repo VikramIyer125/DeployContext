@@ -31,6 +31,14 @@ export class FakeGitHub implements GitHubConnector {
     return ok([...this.refs]);
   }
 
+  /** Mirror of connectors/github.ts listRepoTree for offline tests. */
+  async listTree(_repo: string, ref: string): Promise<ConnectorResult<string[]>> {
+    if (this.failWith) return err(this.failWith.reason, this.failWith.detail);
+    const files = this.files[ref];
+    if (!files) return err("not-found", `ref "${ref}" not found`);
+    return ok(Object.keys(files));
+  }
+
   async readFile(repo: string, ref: string, path: string): Promise<ConnectorResult<string>> {
     if (this.failWith) return err(this.failWith.reason, this.failWith.detail);
     const content = this.files[ref]?.[path];
