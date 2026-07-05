@@ -24,6 +24,11 @@ import { ToolRegistry } from "./investigate/tools.js";
 import { InvestigationRunner } from "./investigate/runner.js";
 import { CodeFixer } from "./fixer/codefixer.js";
 import { createWorkspaceManager } from "./fixer/workspace.js";
+import { ProposalStore } from "./registry/proposals.js";
+import { RegistryManager } from "./registry/manager.js";
+import { BootstrapFlow } from "./bootstrap/flow.js";
+import { classifyDeployMessage, draftBumpProposal } from "./deploywatch/listener.js";
+import { proposalCard } from "./slack/proposalCards.js";
 import type { FixOutcome, Investigation } from "./domain/types.js";
 
 const { App } = boltPkg;
@@ -116,6 +121,36 @@ async function main(): Promise<void> {
     store: invStore,
     reporter: new SlackThreadReporter(app.client),
   });
+
+  // ---- Registry write path + proposal flow (§5) -----------------------------
+  const proposalStore = new ProposalStore(config.sqlitePath);
+  const registryManager = new RegistryManager({
+    github,
+    registry,
+    repo: config.githubRepo,
+    manifestPath: config.manifestPath,
+  });
+  const bootstrapFlow = new BootstrapFlow({
+    slackSearch,
+    github,
+    anthropic,
+    registry,
+    proposals: proposalStore,
+    repo: config.githubRepo,
+  });
+
+  async function postProposalCard(proposalId: string, channel: string, threadTs?: string): Promise<void> {
+    const proposal = proposalStore.get(proposalId);
+    if (!proposal) return;
+    const card = proposalCard(proposal);
+    const posted = await app.client.chat.postMessage({
+      channel,
+      ...(threadTs ? { thread_ts: threadTs } : {}),
+      text: card.text,
+      blocks: card.blocks as never,
+    });
+    if (posted.ts) proposalStore.setCard(proposal.id, channel, posted.ts);
+  }
 
   async function runInvestigation(inv: Investigation): Promise<void> {
     try {
@@ -232,13 +267,51 @@ async function main(): Promise<void> {
           void runInvestigation(inv);
           return;
         }
-        case "bootstrap":
-        case "registry-update": {
-          // Replaced by ProposalFlow/BootstrapFlow in M5.
+        case "bootstrap": {
           await say({
-            text: ":construction: Registry proposals land in M5. For now, deployments.yaml is edited via PR.",
+            text: ":pick: Mining Slack history and repo refs to bootstrap the registry — proposals coming up…",
             thread_ts: threadTs,
           });
+          void (async () => {
+            try {
+              const result = await bootstrapFlow.run();
+              await say({
+                text:
+                  `:clipboard: Bootstrap: mined *${result.minedMessages}* messages + repo refs → ` +
+                  `*${result.proposals.length}* proposal(s)` +
+                  (result.skipped.length ? ` (${result.skipped.map((s) => `\`${s}\``).join(", ")} already up to date)` : "") +
+                  (result.proposals.length ? " — confirm each below:" : "."),
+                thread_ts: threadTs,
+              });
+              for (const p of result.proposals) {
+                await postProposalCard(p.id, ev.channel, threadTs);
+              }
+            } catch (e) {
+              log.error("bootstrap failed", { error: (e as Error).message });
+              await say({ text: `Bootstrap failed: ${(e as Error).message}`, thread_ts: threadTs }).catch(() => {});
+            }
+          })();
+          return;
+        }
+        case "registry-update": {
+          const announcement = await classifyDeployMessage(anthropic, text);
+          const proposal = draftBumpProposal({
+            announcement,
+            registry,
+            proposals: proposalStore,
+            permalink: await client.chat
+              .getPermalink({ channel: ev.channel, message_ts: ev.ts })
+              .then((p) => p.permalink ?? "")
+              .catch(() => ""),
+          });
+          if (!proposal) {
+            await say({
+              text: "I couldn't turn that into a registry change. Tell me customer + version/ref, e.g. `Acme moved to v2.5.0 (tag v2.5.0)`.",
+              thread_ts: threadTs,
+            });
+            return;
+          }
+          await postProposalCard(proposal.id, ev.channel, threadTs);
           return;
         }
         case "chitchat": {
@@ -261,10 +334,10 @@ async function main(): Promise<void> {
     }
   });
 
-  // Passive listening is scoped to ONE configured channel (deploy-watch, M5);
-  // here we harvest RTS action tokens and route human replies in investigation
-  // threads into the running investigation (thread continuity, §5).
-  app.event("message", async ({ event }) => {
+  // Passive listening: RTS action-token harvest on every message; deploy-watch
+  // scoped to ONE configured channel (§5); thread continuity for running
+  // investigations elsewhere.
+  app.event("message", async ({ event, context }) => {
     const ev = event as typeof event & {
       action_token?: string;
       thread_ts?: string;
@@ -274,12 +347,108 @@ async function main(): Promise<void> {
       subtype?: string;
     };
     tokenStore.set(ev.action_token);
-    if (ev.bot_id || ev.subtype || !ev.thread_ts || !ev.text) return;
+    if (!ev.text) return;
+    if (ev.bot_id && ev.bot_id === context.botId) return; // never react to ourselves
+
+    // Deploy-watch: only #deploys, only top-level messages.
+    if (ev.channel === config.deployChannelId && !ev.thread_ts) {
+      try {
+        const announcement = await classifyDeployMessage(anthropic, ev.text);
+        if (!announcement.isAnnouncement) return;
+        const permalink = await app.client.chat
+          .getPermalink({ channel: ev.channel, message_ts: ev.ts })
+          .then((p) => p.permalink ?? "")
+          .catch(() => "");
+        const proposal = draftBumpProposal({ announcement, registry, proposals: proposalStore, permalink });
+        if (proposal) {
+          log.info("deploy-watch proposal drafted", { proposal: proposal.id, customer: proposal.customer });
+          await postProposalCard(proposal.id, ev.channel, ev.ts);
+        }
+      } catch (e) {
+        log.error("deploy-watch failed", { error: (e as Error).message });
+      }
+      return;
+    }
+
+    // Thread continuity (human replies only).
+    if (ev.bot_id || ev.subtype || !ev.thread_ts) return;
     if (ev.text.includes("<@")) return; // mentions are handled by app_mention
     const inv = invStore.byThread(ev.channel, ev.thread_ts);
     if (inv && inv.status === "running") {
       invStore.pushContext(inv.id, `${ev.user ?? "someone"}: ${ev.text}`);
       log.info("thread context queued", { inv: inv.id });
+    }
+  });
+
+  // Proposal confirm/ignore (§5): confirmed proposals graduate to the manifest
+  // via RegistryManager (direct commit for bumps, PR for structural changes).
+  app.action("proposal_confirm", async ({ ack, body, action }) => {
+    await ack();
+    const id = (action as { value?: string }).value ?? "";
+    const proposal = proposalStore.get(id);
+    const userId = (body as { user?: { id?: string } }).user?.id;
+    const channel = (body as { channel?: { id?: string } }).channel?.id ?? proposal?.confirmCard?.channel;
+    const cardTs = (body as { message?: { ts?: string } }).message?.ts ?? proposal?.confirmCard?.ts;
+    if (!proposal || proposal.status !== "pending" || !channel) return;
+
+    proposalStore.setStatus(id, "confirmed");
+    const applied = await registryManager.apply(proposal);
+    if (!applied.ok) {
+      proposalStore.setStatus(id, "pending");
+      await app.client.chat.postMessage({
+        channel,
+        thread_ts: cardTs,
+        text: `:warning: Applying proposal \`${id}\` failed: [${applied.reason}] ${applied.detail}`,
+      });
+      return;
+    }
+    proposalStore.setStatus(id, "applied");
+    log.info("proposal applied", { proposal: id, mode: applied.data.mode });
+    if (cardTs) {
+      await app.client.chat
+        .update({
+          channel,
+          ts: cardTs,
+          text: `Registry updated for ${proposal.customer}`,
+          blocks: [
+            {
+              type: "section",
+              text: {
+                type: "mrkdwn",
+                text:
+                  `:white_check_mark: Registry ${applied.data.mode === "commit" ? "updated" : "PR opened"} for *${proposal.customer}* — ` +
+                  `<${applied.data.url}|${applied.data.mode === "commit" ? "manifest" : "review PR"}> (confirmed by <@${userId}>)`,
+              },
+            },
+          ] as never,
+        })
+        .catch((e) => log.warn("card update failed", { error: (e as Error).message }));
+    }
+  });
+
+  app.action("proposal_ignore", async ({ ack, body, action }) => {
+    await ack();
+    const id = (action as { value?: string }).value ?? "";
+    const proposal = proposalStore.get(id);
+    const userId = (body as { user?: { id?: string } }).user?.id;
+    const channel = (body as { channel?: { id?: string } }).channel?.id ?? proposal?.confirmCard?.channel;
+    const cardTs = (body as { message?: { ts?: string } }).message?.ts ?? proposal?.confirmCard?.ts;
+    if (!proposal || !channel) return;
+    proposalStore.setStatus(id, "rejected");
+    if (cardTs) {
+      await app.client.chat
+        .update({
+          channel,
+          ts: cardTs,
+          text: `Proposal ignored`,
+          blocks: [
+            {
+              type: "section",
+              text: { type: "mrkdwn", text: `:no_entry_sign: Proposal \`${id}\` ignored by <@${userId}>.` },
+            },
+          ] as never,
+        })
+        .catch(() => {});
     }
   });
 
