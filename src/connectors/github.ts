@@ -9,6 +9,36 @@ import { ok, err } from "./types.js";
 
 const API = "https://api.github.com";
 
+/**
+ * List file paths at a ref (used by the read_code tool to guide the model
+ * after a missed path). Standalone helper, not part of GitHubConnector.
+ */
+export async function listRepoTree(
+  token: string,
+  repo: string,
+  ref: string,
+  apiBase: string = API,
+): Promise<ConnectorResult<string[]>> {
+  let res: Response;
+  try {
+    res = await fetch(`${apiBase}/repos/${repo}/git/trees/${encodeURIComponent(ref)}?recursive=1`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+      },
+    });
+  } catch (e) {
+    return err("unavailable", `network error calling GitHub: ${(e as Error).message}`);
+  }
+  if (!res.ok) {
+    if (res.status === 404) return err("not-found", `ref "${ref}" not found in ${repo}`);
+    return err("unavailable", `tree ${repo}@${ref} → ${res.status}`);
+  }
+  const data = (await res.json()) as { tree: Array<{ path: string; type: string }> };
+  return ok(data.tree.filter((t) => t.type === "blob").map((t) => t.path).slice(0, 300));
+}
+
 export class GitHubLiveConnector implements GitHubConnector {
   constructor(
     private readonly token: string,

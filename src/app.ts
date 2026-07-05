@@ -13,10 +13,16 @@ import { GitHubLiveConnector } from "./connectors/github.js";
 import { UnleashLiveConnector } from "./connectors/unleash.js";
 import { SeededLogSource } from "./connectors/logs.js";
 import { RtsSlackSearch, LatestActionTokenStore } from "./connectors/slackSearch.js";
+import { listRepoTree } from "./connectors/github.js";
 import { Registry, githubManifestLoader } from "./registry/registry.js";
 import { StateResolver } from "./resolve/resolver.js";
 import { triage, resolveCustomer, type ThreadMessage } from "./triage.js";
-import { formatState, clarifyCustomer } from "./slack/format.js";
+import { formatState, formatDiagnosis, clarifyCustomer } from "./slack/format.js";
+import { InvestigationStore } from "./investigate/store.js";
+import { SlackThreadReporter } from "./investigate/reporter.js";
+import { ToolRegistry } from "./investigate/tools.js";
+import { InvestigationRunner } from "./investigate/runner.js";
+import type { Investigation } from "./domain/types.js";
 
 const { App } = boltPkg;
 
@@ -87,8 +93,51 @@ async function main(): Promise<void> {
     logLevel: "warn" as never,
   });
   const slackSearch = new RtsSlackSearch(app.client, tokenStore);
-  void slackSearch; // wired into the investigation loop in M3, bootstrap in M5
-  void logSource;
+
+  // ---- Layer 2: investigation loop -----------------------------------------
+  const invStore = new InvestigationStore(config.sqlitePath);
+  const toolRegistry = new ToolRegistry({
+    registry,
+    resolver,
+    github,
+    unleash,
+    logs: logSource,
+    slackSearch,
+    unleashBaseUrl: config.unleashUrl,
+    githubTree: (repo, ref) => listRepoTree(config.githubToken, repo, ref),
+  });
+  const runner = new InvestigationRunner({
+    llm: anthropic,
+    tools: toolRegistry,
+    registry,
+    resolver,
+    store: invStore,
+    reporter: new SlackThreadReporter(app.client),
+  });
+
+  async function runInvestigation(inv: Investigation): Promise<void> {
+    try {
+      const diagnosis = await runner.run(inv);
+      const card = formatDiagnosis(inv, diagnosis);
+      await app.client.chat.postMessage({
+        channel: inv.trigger.channel,
+        thread_ts: inv.trigger.threadTs,
+        text: card.text,
+        blocks: card.blocks as never,
+      });
+      log.info("investigation finished", { inv: inv.id, verdict: diagnosis.verdict });
+    } catch (e) {
+      log.error("investigation crashed", { inv: inv.id, error: (e as Error).message });
+      invStore.setStatus(inv.id, "escalated");
+      await app.client.chat
+        .postMessage({
+          channel: inv.trigger.channel,
+          thread_ts: inv.trigger.threadTs,
+          text: `:rotating_light: Investigation \`${inv.id}\` hit an internal error and needs a human: ${(e as Error).message}`,
+        })
+        .catch(() => {});
+    }
+  }
 
   // ---- Router ---------------------------------------------------------------
   app.event("app_mention", async ({ event, client, say }) => {
@@ -135,11 +184,50 @@ async function main(): Promise<void> {
           return;
         }
         case "investigate": {
-          // Replaced by the InvestigationRunner in M3.
+          // Never launch against a guessed customer (§5 MUST).
+          if (resolution.kind === "ask") {
+            await say({
+              text: clarifyCustomer(registry.list().map((e) => e.customer)),
+              thread_ts: threadTs,
+            });
+            return;
+          }
+
+          // Mention inside a thread we're already investigating → added context.
+          const existing = invStore.byThread(ev.channel, threadTs);
+          if (existing && existing.status === "running") {
+            invStore.pushContext(existing.id, text);
+            await say({
+              text: `Noted — folding that into the running investigation \`${existing.id}\`.`,
+              thread_ts: threadTs,
+            });
+            return;
+          }
+
+          let permalink = "";
+          try {
+            const p = await client.chat.getPermalink({ channel: ev.channel, message_ts: ev.ts });
+            permalink = p.permalink ?? "";
+          } catch {
+            /* permalink is nice-to-have */
+          }
+
+          const reportText =
+            threadContext.length > 0
+              ? `${text}\n\nThread context (the report this refers to):\n${threadContext
+                  .map((m) => `- ${m.author}: ${m.text}`)
+                  .join("\n")}`
+              : text;
+
+          const inv = invStore.create({
+            trigger: { channel: ev.channel, threadTs, permalink, text: reportText },
+            customer: resolution.entry.customer,
+          });
           await say({
-            text: ":construction: The investigation loop isn't wired up yet (lands in M3). For now I can answer `what is <customer> running?`",
+            text: `:mag: On it — investigating this for *${resolution.entry.displayName}* (\`${inv.id}\`). I'll post progress here.`,
             thread_ts: threadTs,
           });
+          void runInvestigation(inv);
           return;
         }
         case "bootstrap":
@@ -171,17 +259,45 @@ async function main(): Promise<void> {
     }
   });
 
-  // Passive listening is scoped to ONE configured channel (deploy-watch, M5).
-  // For now we only harvest RTS action tokens from message events.
+  // Passive listening is scoped to ONE configured channel (deploy-watch, M5);
+  // here we harvest RTS action tokens and route human replies in investigation
+  // threads into the running investigation (thread continuity, §5).
   app.event("message", async ({ event }) => {
-    const ev = event as typeof event & { action_token?: string };
+    const ev = event as typeof event & {
+      action_token?: string;
+      thread_ts?: string;
+      user?: string;
+      text?: string;
+      bot_id?: string;
+      subtype?: string;
+    };
     tokenStore.set(ev.action_token);
+    if (ev.bot_id || ev.subtype || !ev.thread_ts || !ev.text) return;
+    if (ev.text.includes("<@")) return; // mentions are handled by app_mention
+    const inv = invStore.byThread(ev.channel, ev.thread_ts);
+    if (inv && inv.status === "running") {
+      invStore.pushContext(inv.id, `${ev.user ?? "someone"}: ${ev.text}`);
+      log.info("thread context queued", { inv: inv.id });
+    }
   });
 
-  // Buttons arrive in M3 (approval gate) and M5 (confirm cards); ack early
-  // clicks so Slack doesn't show an error.
-  app.action(/.+/, async ({ ack }) => {
+  // The MANDATORY approval gate: the CodeFixer only ever launches from this
+  // click. (The fixer itself lands in M4 — for now we record the approval.)
+  app.action("attempt_fix", async ({ ack, body, action }) => {
     await ack();
+    const invId = (action as { value?: string }).value ?? "";
+    const inv = invStore.get(invId);
+    const userId = (body as { user?: { id?: string } }).user?.id;
+    if (!inv) {
+      log.warn("attempt_fix for unknown investigation", { invId });
+      return;
+    }
+    log.info("fix attempt approved", { inv: invId, by: userId });
+    await app.client.chat.postMessage({
+      channel: inv.trigger.channel,
+      thread_ts: inv.trigger.threadTs,
+      text: `:white_check_mark: Fix attempt approved by <@${userId}> for \`${invId}\`. :construction: The CodeFixer sandbox lands in M4 — approval recorded.`,
+    });
   });
 
   // ---- Boot ------------------------------------------------------------------

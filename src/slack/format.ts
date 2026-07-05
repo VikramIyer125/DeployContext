@@ -3,7 +3,7 @@
  * Every claim carries its provenance line — that's the product.
  */
 import { dump } from "js-yaml";
-import type { Provenance, RegistryEntry, ResolvedState } from "../domain/types.js";
+import type { Diagnosis, Investigation, Provenance, RegistryEntry } from "../domain/types.js";
 import type { ResolveOutcome } from "../resolve/resolver.js";
 
 type Block = Record<string, unknown>;
@@ -75,6 +75,84 @@ export function formatState(
     `(${entry.code.repo}@${entry.code.ref.value}); flags on: ${enabled.join(", ") || "none"}`;
 
   return { text, blocks };
+}
+
+const VERDICT_META: Record<Diagnosis["verdict"], { emoji: string; label: string }> = {
+  "code-issue": { emoji: ":bug:", label: "Code issue" },
+  "config-issue": { emoji: ":gear:", label: "Config issue" },
+  inconclusive: { emoji: ":grey_question:", label: "Inconclusive" },
+};
+
+function truncate(text: string, max: number): string {
+  return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+}
+
+/**
+ * The diagnosis card posted in-thread. On a code-issue verdict it carries the
+ * "Attempt fix →" button — the MANDATORY human approval gate; the CodeFixer
+ * never launches without that click.
+ */
+export function formatDiagnosis(
+  inv: Investigation,
+  diagnosis: Diagnosis,
+): { text: string; blocks: Block[] } {
+  const meta = VERDICT_META[diagnosis.verdict];
+  const blocks: Block[] = [
+    mrkdwn(`${meta.emoji} *Diagnosis: ${meta.label}* — ${truncate(diagnosis.culprit, 300)}`),
+    mrkdwn(truncate(diagnosis.reasoning, 2500)),
+  ];
+
+  if (inv.evidence.length > 0) {
+    const items = inv.evidence.slice(0, 6).map((e) => {
+      const label = truncate(e.summary, 180);
+      const link = e.source.evidenceUrl && e.source.evidenceUrl.startsWith("http")
+        ? ` (<${e.source.evidenceUrl}|${e.source.source}>)`
+        : ` (${e.source.source})`;
+      return `• _${e.kind}_: ${label}${link}`;
+    });
+    blocks.push(mrkdwn(`*Evidence* (${inv.evidence.length} items, gathered structurally)\n${items.join("\n")}`));
+  }
+
+  const action = diagnosis.recommendedAction;
+  if (action.type === "flag-change") {
+    blocks.push(
+      mrkdwn(
+        `*Recommended:* flag change\n${action.changes.map((c) => `• \`${c.flag}\` → \`${String(c.to)}\``).join("\n")}`,
+      ),
+    );
+  } else if (action.type === "code-fix") {
+    const flags = Object.entries(action.brief.reproductionConditions.flags)
+      .map(([k, v]) => `\`${k}=${String(v)}\``)
+      .join(" ");
+    blocks.push(
+      mrkdwn(
+        `*Recommended:* code fix against \`${action.brief.repo}\` @ \`${action.brief.ref}\`\n` +
+          `_${truncate(action.brief.bugSummary, 400)}_\n` +
+          `Reproduces under: ${flags}\n${action.brief.reproductionConditions.versionNote}`,
+      ),
+    );
+    blocks.push({
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          style: "primary",
+          text: { type: "plain_text", text: "Attempt fix →" },
+          action_id: "attempt_fix",
+          value: inv.id,
+        },
+      ],
+    });
+  } else {
+    blocks.push(mrkdwn(`*Recommended:* escalate to a human\n${truncate(action.toHuman, 500)}`));
+  }
+
+  blocks.push(context(`investigation \`${inv.id}\` · <${inv.trigger.permalink}|original report> · DeployContext`));
+
+  return {
+    text: `Diagnosis for ${inv.customer}: ${diagnosis.verdict} — ${diagnosis.culprit}`,
+    blocks,
+  };
 }
 
 export const CLARIFY_CUSTOMER_TEXT =
