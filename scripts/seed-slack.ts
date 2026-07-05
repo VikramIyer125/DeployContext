@@ -12,6 +12,7 @@
  *   SLACK_BOT_TOKEN=xoxb-… npx tsx scripts/seed-slack.ts
  *   npx tsx scripts/seed-slack.ts --dry-run   # print actions, no API calls
  */
+import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -42,6 +43,19 @@ function validateSeed(): void {
 }
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Slack rewrites Unicode emoji to :shortcode: form in stored message text
+ * (e.g. 🚀 → :rocket:), which breaks exact-text idempotency comparison.
+ * Normalize both fixture and history text by stripping emoji shortcodes and
+ * Unicode emoji before comparing.
+ */
+const normalizeText = (text: string): string =>
+  text
+    .replace(/:[a-z0-9_+'-]+:/g, "")
+    .replace(/\p{Extended_Pictographic}|\u{FE0F}|\u{200D}/gu, "")
+    .replace(/\s+/g, " ")
+    .trim();
 
 async function main(): Promise<void> {
   validateSeed();
@@ -100,7 +114,7 @@ async function main(): Promise<void> {
       channel: id,
       limit: 200,
     }) as AsyncIterable<{ messages?: Array<{ text?: string }> }>) {
-      for (const msg of page.messages ?? []) if (msg.text) texts.add(msg.text);
+      for (const msg of page.messages ?? []) if (msg.text) texts.add(normalizeText(msg.text));
     }
     alreadyPosted.set(name, texts);
   }
@@ -109,7 +123,7 @@ async function main(): Promise<void> {
   let posted = 0;
   let skipped = 0;
   for (const msg of seed.messages) {
-    if (alreadyPosted.get(msg.channel)!.has(msg.text)) {
+    if (alreadyPosted.get(msg.channel)!.has(normalizeText(msg.text))) {
       skipped++;
       continue;
     }

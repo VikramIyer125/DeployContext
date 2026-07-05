@@ -10,6 +10,7 @@
  *   UNLEASH_ADMIN_TOKEN  admin API token
  *   UNLEASH_API_TOKEN    client API token (production env)
  */
+import "dotenv/config";
 import { initialize } from "unleash-client";
 
 const UNLEASH_URL = process.env.UNLEASH_URL ?? "http://localhost:4242";
