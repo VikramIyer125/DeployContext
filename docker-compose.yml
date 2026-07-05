@@ -1,0 +1,33 @@
+# Unleash OSS + Postgres for the DeployContext demo world.
+# Tokens are pre-provisioned via INIT_* so setup needs no UI clicks.
+# These are local-dev credentials only — do not reuse anywhere real.
+services:
+  unleash-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: unleash
+      POSTGRES_USER: unleash
+      POSTGRES_PASSWORD: unleash
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U unleash"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    volumes:
+      - unleash-db-data:/var/lib/postgresql/data
+
+  unleash:
+    image: unleashorg/unleash-server:6
+    depends_on:
+      unleash-db:
+        condition: service_healthy
+    ports:
+      - "4242:4242"
+    environment:
+      DATABASE_URL: postgres://unleash:unleash@unleash-db/unleash
+      DATABASE_SSL: "false"
+      INIT_ADMIN_API_TOKENS: "*:*.deploycontext-insecure-admin-token"
+      INIT_CLIENT_API_TOKENS: "default:production.deploycontext-insecure-client-token"
+
+volumes:
+  unleash-db-data:

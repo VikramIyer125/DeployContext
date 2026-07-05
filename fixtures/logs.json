@@ -1,0 +1,1466 @@
+[
+  {
+    "ts": "2026-06-28T00:51:48.884Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-06-28T02:21:15.487Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-06-28T02:37:47.936Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T06:26:12.322Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-28T07:03:08.559Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-06-28T07:10:51.422Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-28T07:38:38.685Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-06-28T08:57:06.594Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-06-28T10:11:10.153Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-06-28T10:13:56.153Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T10:22:24.413Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-28T11:01:13.444Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T11:26:01.931Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T11:41:23.520Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-06-28T12:02:28.757Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-06-28T12:33:04.966Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 223 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T12:44:22.926Z",
+    "level": "error",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "upstream timeout: reports-svc (5000ms)"
+  },
+  {
+    "ts": "2026-06-28T13:51:59.495Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-06-28T13:57:21.629Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T14:26:29.893Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-06-28T16:35:26.718Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 180 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T17:09:25.426Z",
+    "level": "error",
+    "service": "billing_worker",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "payment provider 503, will retry"
+  },
+  {
+    "ts": "2026-06-28T19:09:19.008Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-28T19:34:16.973Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-06-28T19:35:30.947Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-06-28T19:59:12.635Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-28T20:47:48.714Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-06-28T22:49:32.489Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 113 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T22:53:49.820Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-06-28T22:58:31.846Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-06-28T23:26:07.366Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-06-29T00:49:44.858Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-06-29T02:49:27.724Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-29T03:26:53.070Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-06-29T03:50:10.992Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T04:21:53.113Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-06-29T04:33:54.697Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 264 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T04:36:01.795Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-06-29T05:01:18.475Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-06-29T06:02:32.827Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-06-29T08:02:54.828Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-06-29T08:15:03.471Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-06-29T11:34:52.996Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T11:55:21.313Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-06-29T15:32:27.222Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 286 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T16:35:54.194Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-29T16:39:44.379Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "invoice batch settled — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T18:26:25.141Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 159 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T19:53:12.198Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-06-29T20:40:43.563Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-06-30T00:38:29.281Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T01:25:10.305Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-06-30T02:02:53.133Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-06-30T02:21:35.797Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "invoice batch settled — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T02:38:54.794Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 227 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T02:48:09.752Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T03:02:14.491Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-30T04:27:34.040Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-06-30T07:20:07.286Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-06-30T07:56:30.620Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-30T08:43:25.458Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-30T09:50:03.091Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 168 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T11:34:25.612Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-06-30T11:38:31.172Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T14:44:11.633Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T18:04:10.321Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-06-30T19:32:14.518Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-30T19:49:59.157Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 222 rows — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T21:29:16.629Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-06-30T21:40:21.958Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T22:51:31.212Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "invoice batch settled — customer=acme"
+  },
+  {
+    "ts": "2026-06-30T22:54:49.633Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-06-30T23:19:37.440Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-06-30T23:41:03.549Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T00:02:27.651Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 325 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T04:03:38.904Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T04:05:13.510Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-01T04:33:04.275Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "invoice batch settled — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T05:22:19.317Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T06:28:10.850Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T07:44:25.188Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-01T10:05:57.938Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 385 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T11:47:46.859Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T13:06:29.579Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-01T13:15:49.531Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T13:22:41.574Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-01T15:07:33.731Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T16:02:52.378Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-01T16:11:00.445Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T20:07:06.734Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-07-01T20:56:08.446Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "invoice batch settled — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T23:38:58.342Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-01T23:58:02.623Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-07-02T01:42:22.260Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-02T03:15:13.441Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-07-02T04:13:13.711Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-02T05:13:17.265Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-02T05:19:05.790Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-02T05:37:58.836Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-02T05:41:39.912Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-02T05:43:44.337Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-02T05:49:58.553Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "invoice batch settled — customer=acme"
+  },
+  {
+    "ts": "2026-07-02T07:09:54.447Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-02T09:02:12.919Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "SSO login ok — customer=acme"
+  },
+  {
+    "ts": "2026-07-02T11:02:17.958Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-02T12:23:44.240Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-02T12:32:30.772Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "SSO login ok — customer=acme"
+  },
+  {
+    "ts": "2026-07-02T13:13:42.034Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-02T13:31:16.859Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-02T15:19:00.832Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-02T16:54:15.342Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-07-02T18:32:59.637Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-02T19:11:04.740Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-07-02T19:12:53.475Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-07-02T23:06:24.204Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-07-02T23:10:32.732Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "SSO login ok — customer=beta"
+  },
+  {
+    "ts": "2026-07-02T23:46:28.189Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-07-03T02:37:26.906Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-03T02:44:43.264Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-03T03:59:55.562Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-03T04:02:07.103Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-03T04:47:58.305Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-03T05:03:44.578Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-03T06:10:48.406Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-07-03T08:05:46.628Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "SSO login ok — customer=acme"
+  },
+  {
+    "ts": "2026-07-03T09:14:20.800Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-03T09:14:22Z",
+    "level": "error",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cannot read field 'ledgerRef' — customer=acme version=2.3.1 flags=new_billing,!legacy_export"
+  },
+  {
+    "ts": "2026-07-03T10:15:25.338Z",
+    "level": "error",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "SAML assertion clock skew — retried ok"
+  },
+  {
+    "ts": "2026-07-03T11:15:28.965Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "invoice batch settled — customer=beta"
+  },
+  {
+    "ts": "2026-07-03T11:48:38.868Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-03T12:42:50.100Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-03T14:02:49.800Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-03T14:02:51Z",
+    "level": "error",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cannot read field 'ledgerRef' — customer=acme version=2.3.1 flags=new_billing,!legacy_export"
+  },
+  {
+    "ts": "2026-07-03T15:10:14.629Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 146 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-03T16:31:41.284Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-03T17:15:28.501Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-03T18:23:47.134Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "SSO login ok — customer=acme"
+  },
+  {
+    "ts": "2026-07-03T19:31:17.036Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-04T02:59:36.578Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 245 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-04T03:57:19.814Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-04T04:04:06.570Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-04T05:48:14.822Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-04T07:45:35.882Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-04T09:15:01.800Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-04T09:15:03Z",
+    "level": "error",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cannot read field 'ledgerRef' — customer=acme version=2.3.1 flags=new_billing,!legacy_export"
+  },
+  {
+    "ts": "2026-07-04T10:40:06.903Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 183 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-04T10:56:53.224Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-04T11:08:00.800Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-07-04T11:38:11.102Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-04T12:07:16.901Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "invoice batch settled — customer=beta"
+  },
+  {
+    "ts": "2026-07-04T12:30:13.050Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 104 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-04T12:33:08.257Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-04T14:15:06.226Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-04T15:52:29.266Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-07-04T16:44:17.800Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-04T16:44:19Z",
+    "level": "error",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cannot read field 'ledgerRef' — customer=acme version=2.3.1 flags=new_billing,!legacy_export"
+  },
+  {
+    "ts": "2026-07-04T17:31:35.363Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-04T18:12:31.744Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 330 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-04T19:40:39.433Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-04T20:24:30.888Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-04T20:42:50.305Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "invoice batch settled — customer=acme"
+  },
+  {
+    "ts": "2026-07-04T22:23:06.031Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cron tick: cleanup_expired_sessions"
+  },
+  {
+    "ts": "2026-07-05T00:41:42.833Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "invoice batch settled — customer=acme"
+  },
+  {
+    "ts": "2026-07-05T01:02:30.915Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/exports 200 (34ms)"
+  },
+  {
+    "ts": "2026-07-05T01:24:39.822Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-05T03:43:25.006Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-05T05:14:21.982Z",
+    "level": "info",
+    "service": "scheduler",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "nightly maintenance window opened"
+  },
+  {
+    "ts": "2026-07-05T05:46:37.817Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-05T06:09:00.129Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-07-05T06:21:11.573Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "session refreshed — customer=acme"
+  },
+  {
+    "ts": "2026-07-05T07:58:05.721Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 163 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-05T08:42:30.778Z",
+    "level": "info",
+    "service": "auth_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "session refreshed — customer=beta"
+  },
+  {
+    "ts": "2026-07-05T09:14:45.800Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-05T09:14:47Z",
+    "level": "error",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cannot read field 'ledgerRef' — customer=acme version=2.3.1 flags=new_billing,!legacy_export"
+  },
+  {
+    "ts": "2026-07-05T09:37:25.457Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "POST /v1/exports 202 (61ms)"
+  },
+  {
+    "ts": "2026-07-05T10:00:59.909Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  },
+  {
+    "ts": "2026-07-05T11:31:06.800Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "export started — customer=acme"
+  },
+  {
+    "ts": "2026-07-05T11:31:08Z",
+    "level": "error",
+    "service": "export_service",
+    "customer": "acme",
+    "version": "2.3.1",
+    "message": "cannot read field 'ledgerRef' — customer=acme version=2.3.1 flags=new_billing,!legacy_export"
+  },
+  {
+    "ts": "2026-07-05T12:24:46.880Z",
+    "level": "info",
+    "service": "billing_worker",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "invoice batch settled — customer=beta"
+  },
+  {
+    "ts": "2026-07-05T12:30:02.740Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "export started — customer=beta"
+  },
+  {
+    "ts": "2026-07-05T13:08:03.948Z",
+    "level": "info",
+    "service": "export_service",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "exported 327 rows — customer=beta"
+  },
+  {
+    "ts": "2026-07-05T13:54:26.108Z",
+    "level": "warn",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "slow response: GET /v1/reports (2140ms)"
+  },
+  {
+    "ts": "2026-07-05T14:21:13.983Z",
+    "level": "info",
+    "service": "api_gateway",
+    "customer": "beta",
+    "version": "2.5.0",
+    "message": "GET /v1/invoices 200 (18ms)"
+  }
+]

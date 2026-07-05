@@ -1,0 +1,50 @@
+{
+  "channels": [
+    { "name": "deploys", "topic": "Deploy announcements — humans and bots" },
+    { "name": "support-acme", "topic": "Shared channel with Acme Corp" },
+    { "name": "eng-general", "topic": "Engineering chatter" }
+  ],
+  "personas": {
+    "sam-eng": { "username": "sam-eng", "icon_emoji": ":male-technologist:" },
+    "lee-eng": { "username": "lee-eng", "icon_emoji": ":technologist:" },
+    "priya-support": { "username": "priya-support", "icon_emoji": ":female-office-worker:" },
+    "devops-bot": { "username": "devops-bot", "icon_emoji": ":robot_face:" },
+    "acme-jordan": { "username": "jordan (Acme)", "icon_emoji": ":bust_in_silhouette:" },
+    "mara-pm": { "username": "mara-pm", "icon_emoji": ":woman-office-worker:" }
+  },
+  "messages": [
+    { "channel": "deploys", "persona": "devops-bot", "text": "Deploy complete: v2.2.0 → all customers (2026-03-08)." },
+    { "channel": "deploys", "persona": "devops-bot", "text": "Deploy complete: v2.3.0 → all customers (2026-04-21)." },
+    { "channel": "deploys", "persona": "sam-eng", "text": "Shipped acme-prod-v2.3.1 to Acme 🚀 (tag `acme-prod-v2.3.1`, 2026-05-02). Reminder: Acme stays pinned — their upgrade window is quarterly, next one in September." },
+    { "channel": "deploys", "persona": "devops-bot", "text": "Deploy complete: v2.4.0 → staging (2026-05-20)." },
+    { "channel": "deploys", "persona": "lee-eng", "text": "v2.4.2 hotfix rolled to internal dogfood only, not customer-facing (2026-05-27)." },
+    { "channel": "deploys", "persona": "devops-bot", "text": "Deploy complete: v2.5.0 → staging (2026-06-09)." },
+    { "channel": "deploys", "persona": "sam-eng", "text": "Beta Industries is now tracking `main` — rolled v2.5.0 out to them on 2026-06-10 ✅" },
+    { "channel": "deploys", "persona": "priya-support", "text": "FYI from CS: Acme's September upgrade window is confirmed for Sept 14–18. Until then they're on acme-prod-v2.3.1." },
+
+    { "channel": "support-acme", "persona": "priya-support", "text": "Logging for posterity (2026-06-18): Jordan at Acme mentioned exports \"sometimes look off\" last week. Couldn't reproduce on our side, no error attached. Will watch for a recurrence." },
+    { "channel": "support-acme", "persona": "acme-jordan", "text": "thanks for the quick turnaround on the SSO config last month btw 🙏" },
+    { "channel": "support-acme", "persona": "priya-support", "text": "anytime! 🙌" },
+
+    { "channel": "eng-general", "persona": "sam-eng", "text": "standup: finishing the rate limiter rollout today, reviews welcome on #4821" },
+    { "channel": "eng-general", "persona": "lee-eng", "text": "standup: chasing a flaky CI shard on the exporter suite, probably my branch" },
+    { "channel": "eng-general", "persona": "mara-pm", "text": "roadmap review moved to Thursday 2pm, same doc as last time" },
+    { "channel": "eng-general", "persona": "devops-bot", "text": "CI: main green after 3 red runs (flaky shard quarantined)" },
+    { "channel": "eng-general", "persona": "sam-eng", "text": "anyone remember why we still ship the legacy exporter? asking for a friend" },
+    { "channel": "eng-general", "persona": "lee-eng", "text": "@sam because two enterprise contracts say we do 😅" },
+    { "channel": "eng-general", "persona": "mara-pm", "text": "new_billing rollout doc is updated — acme is the pilot, rest of cohort after the quarter closes" },
+    { "channel": "eng-general", "persona": "devops-bot", "text": "nightly backup completed in 42m (dataset +3.1%)" },
+    { "channel": "eng-general", "persona": "priya-support", "text": "reminder to tag support-visible bugs with `cs-impact` so we can trace them" },
+    { "channel": "eng-general", "persona": "sam-eng", "text": "lunch train to the taco place leaves at 12:30 sharp" },
+    { "channel": "eng-general", "persona": "lee-eng", "text": "PSA: bumped vitest on main, clear your node_modules if you see weird cache errors" },
+    { "channel": "eng-general", "persona": "mara-pm", "text": "Q3 OKR draft is in the usual folder, comments by Friday please" },
+    { "channel": "eng-general", "persona": "devops-bot", "text": "oncall handoff: lee-eng → sam-eng (week 28)" },
+    { "channel": "eng-general", "persona": "sam-eng", "text": "code review ask: small PR tightening types in the config loader" },
+    { "channel": "eng-general", "persona": "priya-support", "text": "CS weekly: churn risk flat, two expansion convos in flight" },
+    { "channel": "eng-general", "persona": "lee-eng", "text": "who owns the staging unleash instance? the decoy flags are multiplying" },
+    { "channel": "eng-general", "persona": "devops-bot", "text": "cert rotation for *.internal completed, no action needed" },
+    { "channel": "eng-general", "persona": "mara-pm", "text": "design partner sync notes posted — beta_dashboard feedback is glowing" },
+    { "channel": "eng-general", "persona": "sam-eng", "text": "TIL our export batch size is per-customer config, not global. wild" },
+    { "channel": "eng-general", "persona": "devops-bot", "text": "CI: nightly e2e suite green (12m41s)" }
+  ]
+}

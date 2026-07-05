@@ -1,0 +1,27 @@
+{
+  "name": "deploycontext",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Slack agent that knows what each customer is running and debugs bugs in their reality",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/app.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "seed:slack": "tsx scripts/seed-slack.ts",
+    "setup:unleash": "tsx scripts/setup-unleash.ts",
+    "verify:bug": "./scripts/verify-seeded-bug.sh"
+  },
+  "dependencies": {
+    "@slack/web-api": "^7.8.0",
+    "js-yaml": "^4.1.0",
+    "unleash-client": "^6.1.2"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
+  }
+}

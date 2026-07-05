@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+.env
+*.db
+data/
+# fake-product is its own git repo (pushed to GitHub), not part of this one
+fake-product/
