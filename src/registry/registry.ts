@@ -42,6 +42,16 @@ export class Registry {
     return this.refresh();
   }
 
+  /**
+   * Prime the cache with known-fresh entries (e.g. what RegistryManager just
+   * committed) — avoids GitHub's read-after-write staleness. The cache stays
+   * derived and rebuildable; the manifest in git remains the only truth.
+   */
+  prime(entries: RegistryEntry[]): void {
+    this.entries = new Map(entries.map((e) => [e.customer, e]));
+    this.loadedAt = new Date().toISOString();
+  }
+
   get isLoaded(): boolean {
     return this.loadedAt !== null;
   }

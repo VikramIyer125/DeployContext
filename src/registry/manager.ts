@@ -65,7 +65,8 @@ export class RegistryManager {
         message,
       );
       if (!push.ok) return err(push.reason, `manifest commit failed: ${push.detail}`);
-      await this.deps.registry.refresh();
+      // Prime with what we just wrote — GitHub reads can lag behind the commit.
+      this.deps.registry.prime(entries);
       return ok({ mode: "commit", url: `https://github.com/${repo}/blob/${this.branch}/${manifestPath}` });
     }
 

@@ -5,7 +5,7 @@
  * cards (posted by the caller).
  */
 import type { AnthropicLike } from "../triage.js";
-import type { GitHubConnector, SlackSearch, SlackSearchResult } from "../connectors/types.js";
+import type { ConnectorResult, GitHubConnector, SlackSearch, SlackSearchResult } from "../connectors/types.js";
 import type { Provenance, RegistryEntry } from "../domain/types.js";
 import type { Proposal, ProposalStore } from "../registry/proposals.js";
 import type { Registry } from "../registry/registry.js";
@@ -67,7 +67,10 @@ cluster the evidence per CUSTOMER and propose what each customer is running: (gi
 Rules: only propose customers supported by actual evidence — never invent; prefer refs that exist in \
 the provided ref list; a customer "tracking main" has refType branch/ref main; cite the specific \
 messages/refs each proposal rests on; use confidence inferred-high only when version AND ref are \
-directly stated. Notes should capture operational tribal knowledge (upgrade windows, pins) verbatim.`;
+directly stated. Notes should capture operational tribal knowledge (upgrade windows, pins) verbatim. \
+Customer ids: when the repo has customers/<id>/ config bundles, the id MUST be one of those directory \
+names (match display names to them, e.g. "Beta Industries" → "beta"); otherwise use a short lowercase \
+slug of the first word.`;
 
 export interface BootstrapResult {
   proposals: Proposal[];
@@ -83,6 +86,8 @@ export interface BootstrapDeps {
   registry: Registry;
   proposals: ProposalStore;
   repo: string;
+  /** Optional file listing (default branch) used to anchor customer ids. */
+  githubTree?: (repo: string, ref: string) => Promise<ConnectorResult<string[]>>;
 }
 
 export class BootstrapFlow {
@@ -105,12 +110,30 @@ export class BootstrapFlow {
     const refs = refsRes.ok ? refsRes.data : [];
     if (!refsRes.ok) log.warn("bootstrap listRefs failed", { detail: refsRes.detail });
 
+    // Config bundle directories anchor the canonical customer ids.
+    let bundleIds: string[] = [];
+    if (this.deps.githubTree) {
+      const tree = await this.deps.githubTree(repo, "main");
+      if (tree.ok) {
+        bundleIds = [
+          ...new Set(
+            tree.data
+              .map((p) => p.match(/^customers\/([^/]+)\//)?.[1])
+              .filter((x): x is string => Boolean(x)),
+          ),
+        ];
+      }
+    }
+
     const evidenceBlock = [
       `## Slack messages (${messages.size})`,
       ...[...messages.values()].map((m) => `- [${m.author}] "${m.text.slice(0, 400)}" (${m.permalink})`),
       ``,
       `## Git refs of ${repo} (${refs.length})`,
       ...refs.map((r) => `- ${r.type} ${r.name} (last commit ${r.lastCommitAt})`),
+      ``,
+      `## Config bundles in repo (canonical customer ids)`,
+      bundleIds.length ? bundleIds.map((b) => `- customers/${b}/`).join("\n") : "(none found)",
     ].join("\n");
 
     // ---- One synthesis call -------------------------------------------------
