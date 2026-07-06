@@ -13,12 +13,19 @@ import { log } from "../log.js";
 
 export const SYNTHESIS_MODEL = "claude-sonnet-4-6";
 
-/** Code-owned mining queries — tuned against the seeded history. */
+/**
+ * Code-owned mining queries — tuned against live RTS behavior: question-shaped
+ * queries trigger semantic retrieval; single keywords match literally
+ * (multi-word keyword queries are AND-ish and return almost nothing).
+ */
 const MINING_QUERIES = [
-  "shipped deployed customer version",
-  "rolled out to customer",
-  "pinned tag upgrade window",
-  "tracking main deploy",
+  "What was shipped or deployed to each customer?",
+  "Which version or tag is each customer running?",
+  "shipped",
+  "deployed",
+  "rolled out",
+  "pinned",
+  "upgrade window",
 ];
 
 const SYNTHESIS_TOOL = {
@@ -104,6 +111,7 @@ export class BootstrapFlow {
         log.warn("bootstrap mining query failed", { q, reason: res.reason, detail: res.detail });
         continue;
       }
+      log.info("bootstrap mining query", { q, hits: res.data.length });
       for (const m of res.data) messages.set(m.permalink || m.ts, m);
     }
     const refsRes = await github.listRefs(repo);

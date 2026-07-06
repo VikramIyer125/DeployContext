@@ -83,6 +83,18 @@ async function main(): Promise<void> {
   const tokenStore = new LatestActionTokenStore();
   const anthropic = new Anthropic({ apiKey: config.anthropicApiKey });
 
+  // Dev aid (DEBUG_SAVE_ACTION_TOKEN=1): persist the latest RTS action token
+  // (gitignored data/) so query tuning can run headlessly against live RTS.
+  const captureActionToken = (token: string | undefined): void => {
+    tokenStore.set(token);
+    if (token && process.env.DEBUG_SAVE_ACTION_TOKEN === "1") {
+      import("node:fs").then((fs) => {
+        fs.mkdirSync("data", { recursive: true });
+        fs.writeFileSync("data/action-token.txt", token);
+      }).catch(() => {});
+    }
+  };
+
   const registry = new Registry(
     githubManifestLoader(github, config.githubRepo, "main", config.manifestPath),
   );
@@ -179,7 +191,7 @@ async function main(): Promise<void> {
   // ---- Router ---------------------------------------------------------------
   app.event("app_mention", async ({ event, client, say }) => {
     const ev = event as typeof event & { action_token?: string };
-    tokenStore.set(ev.action_token);
+    captureActionToken(ev.action_token);
     const started = Date.now();
     const threadTs = ev.thread_ts ?? ev.ts;
 
@@ -346,7 +358,7 @@ async function main(): Promise<void> {
       bot_id?: string;
       subtype?: string;
     };
-    tokenStore.set(ev.action_token);
+    captureActionToken(ev.action_token);
     if (!ev.text) return;
     if (ev.bot_id && ev.bot_id === context.botId) return; // never react to ourselves
 
